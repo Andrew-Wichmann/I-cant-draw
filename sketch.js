@@ -1,16 +1,15 @@
 var circles = [];
-var CANVAS_WIDTH = 1850
-var CANVAS_HEIGHT = 950
-var RESOLUTION = 51
+var CANVAS_WIDTH = 400
+var CANVAS_HEIGHT = 400
+var CIRCLE_MIN_SCALE = 0.02
+var CIRCLE_MAX_SCALE = 0.08
+var CIRCUMFRENCE_RESOLUTION = 1
 function setup() {
   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
-function draw() {
-}
-
 function mousePressed() {
-  new_circ = new Cirle([random(CANVAS_WIDTH), random(CANVAS_HEIGHT)], Math.floor(random(10, 200)))
+  new_circ = new Cirle([random(CANVAS_WIDTH), random(CANVAS_HEIGHT)], Math.floor(random(CANVAS_HEIGHT * CIRCLE_MIN_SCALE, CANVAS_HEIGHT * CIRCLE_MAX_SCALE)))
   circles.push(new_circ)
   new_circ.draw()
 }
@@ -29,8 +28,10 @@ class Cirle {
     this.center = center
     this.radius = radius
     this.perim = []
-    for (var i = 0; i < Math.PI * radius * RESOLUTION; i++) {
-      let theta = (2 * Math.PI / RESOLUTION) * i
+    let dots = radius * CIRCUMFRENCE_RESOLUTION
+    console.log(dots)
+    for (var i = 0; i < dots; i++) {
+      let theta = (2 * Math.PI / dots) * i
       this.perim.push([center[0] + (radius * Math.cos(theta)), center[1] + (radius * Math.sin(theta))])
     }
   }
