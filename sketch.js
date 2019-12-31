@@ -1,9 +1,7 @@
-var rounds = [];
-var r = 50;
-var g = 255;
-var b = 68;
+var circles = [];
 var CANVAS_WIDTH = 1850
 var CANVAS_HEIGHT = 950
+var RESOLUTION = 51
 function setup() {
   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
@@ -12,8 +10,9 @@ function draw() {
 }
 
 function mousePressed() {
-  makeNewRound()
-  drawCircles()
+  new_circ = new Cirle([random(CANVAS_WIDTH), random(CANVAS_HEIGHT)], Math.floor(random(10, 200)))
+  circles.push(new_circ)
+  new_circ.draw()
 }
 
 function myconstrain(x) {
@@ -25,23 +24,23 @@ function myconstrain(x) {
   return x
 }
 
-function drawCircles() {
-  rounds.map((round, round_num) => {
-    round.map(circle => {
-      let diff = ((rounds.length - round_num) * 15)
-      fill(r - diff, g - diff, b - diff)
-      ellipse(circle[0], circle[1], circle[2], circle[2]);
-    })
-  })
-}
-
-function makeNewRound() {
-  let round = [];
-  for (let i = 0; i < 50; i++) {
-    x = random(CANVAS_WIDTH);
-    y = random(CANVAS_HEIGHT);
-    radius = random(CANVAS_WIDTH * .125);
-    round.push([x, y, radius])
+class Cirle {
+  constructor(center, radius) {
+    this.center = center
+    this.radius = radius
+    this.perim = []
+    for (var i = 0; i < Math.PI * radius * RESOLUTION; i++) {
+      let theta = (2 * Math.PI / RESOLUTION) * i
+      this.perim.push([center[0] + (radius * Math.cos(theta)), center[1] + (radius * Math.sin(theta))])
+    }
   }
-  rounds.push(round)
+
+  draw = () => {
+    var r = 50;
+    var g = 255;
+    var b = 68;
+    fill(r, g, b);
+    ellipse(this.center[0], this.center[1], this.radius * 2, this.radius * 2);
+    this.perim.forEach(dot => ellipse(dot[0], dot[1], 10, 10))
+  }
 }
