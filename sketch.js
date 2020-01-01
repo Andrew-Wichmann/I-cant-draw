@@ -2,8 +2,8 @@ var rounds = [];
 var r = 50;
 var g = 255;
 var b = 68;
-var CANVAS_WIDTH = 1850
-var CANVAS_HEIGHT = 950
+var CANVAS_WIDTH = window.innerWidth
+var CANVAS_HEIGHT = window.innerHeight
 function setup() {
   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
