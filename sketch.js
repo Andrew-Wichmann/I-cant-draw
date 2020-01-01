@@ -1,9 +1,9 @@
 var circles = [];
 var CANVAS_WIDTH = 1900
 var CANVAS_HEIGHT = 1000
-var CIRCLE_MIN_RADIUS = 0.02 * CANVAS_HEIGHT
+var CIRCLE_MIN_RADIUS = 0.001 * CANVAS_HEIGHT
 var CIRCLE_MAX_RADIUS = 0.08 * CANVAS_HEIGHT
-var CIRCUMFRENCE_RESOLUTION = 1
+var CIRCUMFRENCE_RESOLUTION = 2
 
 class Circle {
   constructor(center, radius) {
@@ -35,41 +35,34 @@ function setup() {
 }
 
 function mousePressed() {
-  while (true) {
-    rand_x = random(CANVAS_WIDTH)
-    rand_y = random(CANVAS_HEIGHT)
-    if (get(rand_x, rand_y).every(value => value === 0)) {
-      new_circle = grow_circle()
+  center_x = mouseX
+  center_y = mouseY
+  if (get(center_x, center_y).every(value => value === 0)) {
+    new_circle = grow_circle(center_x, center_y)
+    if (new_circle !== undefined) {
       circles.push(new_circle)
       new_circle.draw()
-      break
     }
   }
 }
 
-function grow_circle() {
-  let center = [random(CANVAS_WIDTH), random(CANVAS_HEIGHT)]
-  let radius = Math.floor(random(CIRCLE_MIN_RADIUS, CIRCLE_MAX_RADIUS))
+function grow_circle(center_x, center_y) {
+  let center = [center_x, center_y]
+  let radius = CIRCLE_MIN_RADIUS
   new_circle = new Circle(center, radius)
   if (new_circle.intersects_another()) {
-    while (new_circle.intersects_another()) {
-      radius--
-      new_circle = new Circle(center, radius)
-      if (radius <= CIRCLE_MIN_RADIUS) {
-        return grow_circle()
-      }
-    }
-  } else {
-    while (!new_circle.intersects_another()) {
-      radius++
-      new_circle = new Circle(center, radius)
-      if (radius >= CIRCLE_MAX_RADIUS) {
-        break
-      }
+    return undefined
+  }
+  while (!new_circle.intersects_another()) {
+    radius++
+    new_circle = new Circle(center, radius)
+    if (radius >= CIRCLE_MAX_RADIUS) {
+      break
     }
   }
   return new_circle
 }
+
 function myconstrain(x) {
   if (x < 0) {
     return 0;
