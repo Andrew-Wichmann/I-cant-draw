@@ -34,7 +34,8 @@ function setup() {
   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
-function mousePressed() {
+
+function makeCircle() {
   center_x = mouseX
   center_y = mouseY
   if (get(center_x, center_y).every(value => value === 0)) {
@@ -44,6 +45,14 @@ function mousePressed() {
       new_circle.draw()
     }
   }
+}
+
+function mouseDragged() {
+  makeCircle()
+}
+
+function mousePressed() {
+  makeCircle()
 }
 
 function grow_circle(center_x, center_y) {
