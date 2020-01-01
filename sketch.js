@@ -1,4 +1,6 @@
-var rounds = [];
+var layers = [];
+var DEGRADE_RATE = 15
+var MAX_LAYERS = 255 / DEGRADE_RATE
 var r = 50;
 var g = 255;
 var b = 68;
@@ -8,28 +10,16 @@ function setup() {
   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
-function draw() {
-}
-
 function mousePressed() {
   makeNewRound()
   drawCircles()
 }
 
-function myconstrain(x) {
-  if (x < 0) {
-    return 0;
-  } else if (x > 255) {
-    return 255;
-  }
-  return x
-}
-
 function drawCircles() {
-  rounds.map((round, round_num) => {
+  layers.map((round, round_num) => {
     round.map(circle => {
-      let diff = ((rounds.length - round_num) * 15)
-      fill(r - diff, g - diff, b - diff)
+      let degrade = ((layers.length - round_num) * DEGRADE_RATE)
+      fill(r - degrade, g - degrade, b - degrade)
       ellipse(circle[0], circle[1], circle[2], circle[2]);
     })
   })
@@ -43,5 +33,8 @@ function makeNewRound() {
     radius = random(CANVAS_WIDTH * .125);
     round.push([x, y, radius])
   }
-  rounds.push(round)
+  layers.push(round)
+  if (layers.length > MAX_LAYERS) {
+    layers.shift()
+  }
 }
